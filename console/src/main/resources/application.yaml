@@ -1,0 +1,24 @@
+debug: true
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: console
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: momoino-client
+            client-secret: "${CLIENT_SECRET}"
+            scope:
+            - openid
+            - profile
+            - email
+        provider:
+          keycloak:
+            issuer-uri: http://keycloak.localtest.me:8080/realms/momoino
