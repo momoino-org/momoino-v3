@@ -6,18 +6,26 @@ services:
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/${MOMOINO_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${MOMOINO_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${MOMOINO_DB_PASSWORD}
+      - KEYCLOAK_MOMOINO_CLIENT_ID=${KEYCLOAK_MOMOINO_CLIENT_ID}
+      - KEYCLOAK_MOMOINO_CLIENT_SECRET=${KEYCLOAK_MOMOINO_CLIENT_SECRET}
+      - KEYCLOAK_NETWORK_ALIAS=${KEYCLOAK_NETWORK_ALIAS}
+      - KEYCLOAK_PORT=${KEYCLOAK_PORT}
     ports:
       - 8082:8082
     networks:
       - backend
 
   auth:
-    image: quay.io/keycloak/keycloak:26.0
+    image: ${KEYCLOAK_IMAGE}
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: database
-      KC_DB_USERNAME: keycloak
-      KC_DB_PASSWORD: keycloak
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     volumes:
       - ../docker/keycloak:/opt/keycloak/data/import
     command: start-dev --import-realm --health-enabled=true
@@ -34,37 +42,76 @@ services:
     networks:
       backend:
         aliases:
-          - keycloak.localtest.me
+          - ${KEYCLOAK_NETWORK_ALIAS}
 
   database:
     image: postgres:17.2
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: secret
-      KEYCLOAK_DB_NAME: keycloak
-      KEYCLOAK_DB_USERNAME: keycloak
-      KEYCLOAK_DB_PASSWORD: keycloak
-      MOMOINO_DB_NAME: momoino
-      MOMOINO_DB_USERNAME: momoino
-      MOMOINO_DB_PASSWORD: momoino
-      # POSTGRES_USER: ${SUPER_DB_USER}
-      # POSTGRES_PASSWORD: ${SUPER_DB_PASSWORD}
-      # KEYCLOAK_DB_NAME: ${KEYCLOAK_DB_NAME}
-      # KEYCLOAK_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
-      # KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-      # MOMOINO_DB_NAME: ${MOMOINO_DB_NAME}
-      # MOMOINO_DB_USERNAME: ${MOMOINO_DB_USERNAME}
-      # MOMOINO_DB_PASSWORD: ${MOMOINO_DB_PASSWORD}
+      POSTGRES_USER: ${SUPER_DB_USER}
+      POSTGRES_PASSWORD: ${SUPER_DB_PASSWORD}
+      KEYCLOAK_DB_NAME: ${KEYCLOAK_DB_NAME}
+      KEYCLOAK_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      MOMOINO_DB_NAME: ${MOMOINO_DB_NAME}
+      MOMOINO_DB_USERNAME: ${MOMOINO_DB_USERNAME}
+      MOMOINO_DB_PASSWORD: ${MOMOINO_DB_PASSWORD}
     networks:
       - backend
-    ports:
-      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ../docker/database:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: ${PGADMIN_IMAGE}
+    ports:
+      - ${PGADMIN_PORT}:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
+      - source: keycloak-user.pwd
+        target: /keycloak-user.pwd
+      - source: momoino-user.pwd
+        target: /momoino-user.pwd
+    networks:
+      - backend
 
 networks:
   backend:
 
 volumes:
   pgdata:
+
+configs:
+  keycloak-user.pwd:
+    content: "${KEYCLOAK_DB_PASSWORD}"
+  momoino-user.pwd:
+    content: "${MOMOINO_DB_PASSWORD}"
+  servers.json:
+    content: |
+      {
+        "Servers": {
+          "1": {
+            "Group": "Servers",
+            "Name": "${MOMOINO_DB_NAME}",
+            "Host": "database",
+            "Port": 5432,
+            "MaintenanceDB": "${MOMOINO_DB_NAME}",
+            "Username": "${MOMOINO_DB_USERNAME}",
+            "PassFile": "/momoino-user.pwd",
+            "SSLMode": "prefer"
+          },
+          "2": {
+            "Group": "Servers",
+            "Name": "${KEYCLOAK_DB_NAME}",
+            "Host": "database",
+            "Port": 5432,
+            "MaintenanceDB": "${KEYCLOAK_DB_NAME}",
+            "Username": "${KEYCLOAK_DB_USERNAME}",
+            "PassFile": "/keycloak-user.pwd",
+            "SSLMode": "prefer"
+          }
+        }
+      }

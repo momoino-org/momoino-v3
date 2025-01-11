@@ -1,0 +1,47 @@
+name: "[BE] Console"
+
+on:
+  pull_request:
+    paths: [console/**]
+  push:
+    paths: [console/**]
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 23
+          cache: gradle
+          cache-dependency-path: |
+            console/*.gradle*
+            console/**/gradle-wrapper.properties
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+      - name: Linter
+        working-directory: console
+        run: gradle check
+      - name: Build
+        working-directory: console
+        run: gradle build
+      - name: Upload build reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-reports
+          path: "console/**/build/reports/"
+          if-no-files-found: ignore
+          retention-days: 1
