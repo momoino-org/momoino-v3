@@ -1,11 +1,30 @@
-debug: true
-
 server:
   port: 8082
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
 
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    drop-first: true
+
   application:
     name: console
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  threads:
+    virtual:
+      enabled: true
 
   security:
     oauth2:
@@ -13,12 +32,9 @@ spring:
         registration:
           keycloak:
             provider: keycloak
-            client-id: momoino-client
-            client-secret: "${CLIENT_SECRET}"
-            scope:
-            - openid
-            - profile
-            - email
+            client-id: ${KEYCLOAK_MOMOINO_CLIENT_ID}
+            client-secret: ${KEYCLOAK_MOMOINO_CLIENT_SECRET}
+            scope: [openid, profile, email]
         provider:
           keycloak:
-            issuer-uri: http://keycloak.localtest.me:8080/realms/momoino
+            issuer-uri: http://${KEYCLOAK_NETWORK_ALIAS}:${KEYCLOAK_PORT}/realms/momoino

@@ -1,13 +1,16 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.1'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.hibernate.orm' version '6.6.4.Final'
-	id 'org.graalvm.buildtools.native' version '0.10.4'
+	id "java"
+	id "org.springframework.boot" version "3.4.1"
+	id "io.spring.dependency-management" version "1.1.7"
+	id "org.hibernate.orm" version "6.6.4.Final"
+	id "org.graalvm.buildtools.native" version "0.10.4"
+  id "net.ltgt.errorprone" version "4.1.0"
+  id "com.diffplug.spotless" version "7.0.1"
+  id "com.github.spotbugs" version "6.1.0"
 }
 
-group = 'com.momoino'
-version = '0.0.1-SNAPSHOT'
+group = "com.momoino"
+version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -26,19 +29,24 @@ repositories {
 }
 
 dependencies {
-	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	{
+		exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+	}
+	implementation "org.springframework.boot:spring-boot-starter-jetty"
+	compileOnly "org.projectlombok:lombok:1.18.36"
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	runtimeOnly "org.postgresql:postgresql:42.7.4"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	annotationProcessor "org.projectlombok:lombok:1.18.36"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.springframework.security:spring-security-test"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.11.4"
+  errorprone("com.uber.nullaway:nullaway:0.12.2")
+  errorprone "com.google.errorprone:error_prone_core:2.36.0"
 }
 
 hibernate {
@@ -47,6 +55,35 @@ hibernate {
 	}
 }
 
-tasks.named('test') {
+tasks.named("test") {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+  options.errorprone {
+    option("NullAway:AnnotatedPackages", "com.momoino")
+  }
+}
+
+tasks.named("compileJava") {
+  options.errorprone.error("NullAway")
+}
+
+spotless {
+  java {
+    target 'src/*/java/**/*.java'
+
+    removeUnusedImports()
+    importOrder()
+
+    // Cleanthat will refactor your code, but it may break your style: apply it before your formatter
+    cleanthat()
+
+    palantirJavaFormat("2.50.0")
+    formatAnnotations()
+  }
+}
+
+spotbugs {
+  onlyAnalyze = [ "com.momoino.*" ]
 }
