@@ -1,24 +1,24 @@
 ---
-name: ShellCheck
+name: HadoLint
 
 "on":
   pull_request:
     branches: [main]
-    paths: ["**.sh"]
+    paths: ["**/Dockerfile"]
   push:
     branches: [main]
-    paths: ["**.sh"]
+    paths: ["**/Dockerfile"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}
   cancel-in-progress: true
 
 jobs:
-  check:
+  hadolint:
     name: Check
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
-          fetch-depth: 0
-      - uses: redhat-plumbers-in-action/differential-shellcheck@v5.4.0
+          recursive: true

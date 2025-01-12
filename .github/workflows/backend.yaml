@@ -1,11 +1,13 @@
+---
 name: "[BE] Console"
 
-on:
+"on":
   pull_request:
+    branches: [main]
     paths: [console/**]
   push:
-    paths: [console/**]
     branches: [main]
+    paths: [console/**]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}
@@ -42,6 +44,6 @@ jobs:
         if: always()
         with:
           name: build-reports
-          path: "console/**/build/reports/"
+          path: console/**/build/reports/
           if-no-files-found: ignore
           retention-days: 1

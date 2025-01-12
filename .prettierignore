@@ -1,0 +1,8 @@
+*.java
+*.js
+*.ts
+*.jsx
+*.tsx
+**/build
+**/gradle
+**/*.gradle*
