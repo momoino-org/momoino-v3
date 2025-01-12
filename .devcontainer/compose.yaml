@@ -20,10 +20,10 @@ services:
       - backend
 
   auth:
-    image: ${KEYCLOAK_IMAGE}
+    image: quay.io/keycloak/keycloak:26.0
     environment:
       KC_DB: postgres
-      KC_DB_URL_HOST: database
+      KC_DB_URL_HOST: ${KEYCLOAK_DB_URL_HOST}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     volumes:
@@ -62,7 +62,7 @@ services:
       - ../docker/database:/docker-entrypoint-initdb.d
 
   pgadmin:
-    image: ${PGADMIN_IMAGE}
+    image: dpage/pgadmin4:8.12.0
     ports:
       - ${PGADMIN_PORT}:80
     environment:
