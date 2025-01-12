@@ -1,29 +1,33 @@
 {
-	"name": "Ubuntu",
-	"dockerComposeFile": "compose.yaml",
-	"service": "workspace",
-	"workspaceFolder": "/workspace",
-	"features": {
-		"ghcr.io/devcontainers/features/java:1.6.2": {
-			"installGradle": true,
-			"version": "23",
-			"jdkDistro": "graalce",
-			"gradleVersion": "8.12"
-		}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"vscjava.vscode-java-pack",
-				"vmware.vscode-boot-dev-pack",
-				"EditorConfig.EditorConfig",
-				"esbenp.prettier-vscode",
-				"redhat.vscode-yaml",
-				"redhat.vscode-xml",
-				"GitHub.copilot-chat"
-			]
-		}
-	},
-	"shutdownAction": "stopCompose",
-	"initializeCommand": "bash .devcontainer/setup-env.sh"
+  "name": "Ubuntu",
+  "dockerComposeFile": "compose.yaml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1.6.2": {
+      "installGradle": true,
+      "version": "23",
+      "jdkDistro": "graalce",
+      "gradleVersion": "8.12"
+    },
+    "ghcr.io/devcontainers-extra/features/npm-package": {
+      "package": "prettier",
+      "version": "3.4.2"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml",
+        "redhat.vscode-xml",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+  "shutdownAction": "stopCompose",
+  "initializeCommand": "bash .devcontainer/setup-env.sh"
 }

@@ -1,4 +1,8 @@
 {
   "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-action.json": "file:///workspace/.github/workflows/hadolint.yaml",
+    "https://json.schemastore.org/yamllint.json": "file:///workspace/.github/workflows/.yamllint.yaml"
+  }
 }
