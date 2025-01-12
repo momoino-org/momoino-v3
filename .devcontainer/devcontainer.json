@@ -8,7 +8,7 @@
 			"installGradle": true,
 			"version": "23",
 			"jdkDistro": "graalce",
-			"gradleVersion": "8.11.1"
+			"gradleVersion": "8.12"
 		}
 	},
 	"customizations": {
