@@ -7,6 +7,7 @@ plugins {
   id "net.ltgt.errorprone" version "4.1.0"
   id "com.diffplug.spotless" version "7.0.1"
   id "com.github.spotbugs" version "6.1.0"
+  id 'pmd'
 }
 
 group = "com.momoino"
@@ -37,6 +38,7 @@ dependencies {
 		exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
 	}
 	implementation "org.springframework.boot:spring-boot-starter-jetty"
+  implementation "org.jspecify:jspecify:1.0.0"
 	compileOnly "org.projectlombok:lombok:1.18.36"
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	runtimeOnly "org.postgresql:postgresql:42.7.4"
@@ -86,4 +88,11 @@ spotless {
 
 spotbugs {
   onlyAnalyze = [ "com.momoino.*" ]
+}
+
+pmd {
+  toolVersion = "7.9.0"
+  consoleOutput = true
+  sourceSets = [sourceSets.main]
+  ruleSetFiles "config/pmd-ruleset.xml"
 }
