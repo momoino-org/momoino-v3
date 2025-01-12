@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -33,7 +33,7 @@ public class UserEntity {
         return Optional.ofNullable(id);
     }
 
-    public void setId(@NonNull UUID id) {
+    public void setId(final @NonNull UUID id) {
         this.id = id;
     }
 
@@ -41,7 +41,7 @@ public class UserEntity {
         return username;
     }
 
-    public void setUsername(@NonNull String username) {
+    public void setUsername(final @NonNull String username) {
         this.username = username;
     }
 
@@ -49,7 +49,7 @@ public class UserEntity {
         return password;
     }
 
-    public void setPassword(@NonNull String password) {
+    public void setPassword(final @NonNull String password) {
         this.password = password;
     }
 
@@ -57,7 +57,7 @@ public class UserEntity {
         return roles;
     }
 
-    public void setRoles(@NonNull String roles) {
+    public void setRoles(final @NonNull String roles) {
         this.roles = roles;
     }
 }
