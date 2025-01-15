@@ -5,7 +5,7 @@ plugins {
 	id "org.hibernate.orm" version "6.6.4.Final"
 	id "org.graalvm.buildtools.native" version "0.10.4"
   id "net.ltgt.errorprone" version "4.1.0"
-  id "com.diffplug.spotless" version "7.0.1"
+  id "com.diffplug.spotless" version "7.0.2"
   id "com.github.spotbugs" version "6.1.0"
   id 'pmd'
 }
