@@ -1,13 +1,13 @@
 ---
-name: "[BE] Console"
+name: "[BE] Backend"
 
 "on":
   pull_request:
     branches: [main]
-    paths: [console/**]
+    paths: [backend/**]
   push:
     branches: [main]
-    paths: [console/**]
+    paths: [backend/**]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}
@@ -24,26 +24,26 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 23
+          java-version: 21
           cache: gradle
           cache-dependency-path: |
-            console/*.gradle*
-            console/**/gradle-wrapper.properties
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: wrapper
       - name: Linter
-        working-directory: console
+        working-directory: backend
         run: gradle check
       - name: Build
-        working-directory: console
-        run: gradle build
+        working-directory: backend
+        run: gradle :console:build
       - name: Upload build reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: build-reports
-          path: console/**/build/reports/
+          path: backend/**/build/reports/
           if-no-files-found: ignore
           retention-days: 1

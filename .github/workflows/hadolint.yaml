@@ -33,7 +33,6 @@ jobs:
           recursive: true
           format: sarif
           output-file: hadolint-results.sarif
-          no-fail: true
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
