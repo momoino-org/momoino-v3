@@ -6,7 +6,7 @@ plugins {
   id("org.hibernate.orm") version "6.6.4.Final" apply false
   id("org.graalvm.buildtools.native") version "0.10.4" apply false
   id("com.diffplug.spotless") version "7.0.2" apply false
-  kotlin("plugin.jpa") version "1.9.25" apply false
+  kotlin("plugin.jpa") version "2.1.10" apply false
 }
 
 repositories {
