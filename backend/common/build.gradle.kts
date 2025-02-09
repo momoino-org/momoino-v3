@@ -1,26 +1,17 @@
 plugins {
-  `java-library`
+  id("buildlogic.kotlin-library-conventions")
 
-  kotlin("jvm")
-  kotlin("plugin.spring")
-  id("org.springframework.boot")
-  id("io.spring.dependency-management")
-  id("org.hibernate.orm")
-  id("com.diffplug.spotless")
-  kotlin("plugin.jpa")
+  alias(libs.plugins.kotlin.plugin.spring)
+  alias(libs.plugins.org.springframework.boot)
+  alias(libs.plugins.io.spring.dependencyManagement)
+  alias(libs.plugins.org.hibernate.orm)
+  alias(libs.plugins.kotlin.plugin.jpa)
 }
-
-group = "com.momoino.common"
-version = "0.0.1.pre-alpha"
 
 configurations {
   compileOnly {
     extendsFrom(configurations.annotationProcessor.get())
   }
-}
-
-repositories {
-  mavenCentral()
 }
 
 dependencies {
@@ -34,9 +25,7 @@ dependencies {
   implementation("com.networknt:json-schema-validator:1.5.5")
   runtimeOnly("org.postgresql:postgresql")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
   testImplementation("org.springframework.security:spring-security-test")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 hibernate {
@@ -49,17 +38,4 @@ allOpen {
   annotation("jakarta.persistence.Entity")
   annotation("jakarta.persistence.MappedSuperclass")
   annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-  useJUnitPlatform()
-}
-
-spotless {
-  kotlin {
-    ktlint("1.5.0")
-  }
-  kotlinGradle {
-    ktlint("1.5.0")
-  }
 }

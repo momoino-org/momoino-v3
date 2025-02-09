@@ -1,27 +1,18 @@
 plugins {
-  kotlin("jvm")
-  kotlin("plugin.spring")
-  id("org.springframework.boot")
-  id("io.spring.dependency-management")
-  id("org.hibernate.orm")
-  id("org.graalvm.buildtools.native")
-  id("com.diffplug.spotless")
-  kotlin("plugin.jpa")
+  id("buildlogic.kotlin-application-conventions")
 
-  application
+  alias(libs.plugins.kotlin.plugin.spring)
+  alias(libs.plugins.org.springframework.boot)
+  alias(libs.plugins.io.spring.dependencyManagement)
+  alias(libs.plugins.org.hibernate.orm)
+  alias(libs.plugins.org.graalvm.buildtools.native)
+  alias(libs.plugins.kotlin.plugin.jpa)
 }
-
-group = "com.momoino.console"
-version = "0.0.1.pre-alpha"
 
 configurations {
   compileOnly {
     extendsFrom(configurations.annotationProcessor.get())
   }
-}
-
-repositories {
-  mavenCentral()
 }
 
 dependencies {
@@ -31,6 +22,8 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+  testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.security:spring-security-test")
 }
 
 hibernate {
@@ -43,17 +36,4 @@ allOpen {
   annotation("jakarta.persistence.Entity")
   annotation("jakarta.persistence.MappedSuperclass")
   annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-  useJUnitPlatform()
-}
-
-spotless {
-  kotlin {
-    ktlint("1.5.0")
-  }
-  kotlinGradle {
-    ktlint("1.5.0")
-  }
 }

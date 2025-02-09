@@ -30,7 +30,8 @@ jobs:
             backend/*.gradle*
             backend/**/gradle-wrapper.properties
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        # gradle/actions/setup-gradle@v4.3.0
+        uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b
         with:
           gradle-version: wrapper
       - name: Linter
