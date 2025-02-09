@@ -1,0 +1,144 @@
+---
+openapi: 3.1.1
+
+info:
+  title: Momoino
+  version: 1.0.0
+
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type: string
+          example: /api/xxx
+        timestamp:
+          type: string
+          format: date-time
+
+    DramaType:
+      type: object
+      required: [id, translations, schema]
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 64
+          example: UNCLASSIFIED
+        translations:
+          type: object
+          example:
+            "[language code]":
+              label: "[value]"
+              description: "[value]"
+        schema:
+          type: object
+          example:
+            $schema: https://json-schema.org/draft/2020-12/schema
+            type: object
+            properties: {}
+
+    Drama:
+      type: object
+      required: [id, translations, schema]
+      properties:
+        typeId:
+          type: string
+          minLength: 1
+          maxLength: 64
+          example: UNCLASSIFIED
+        translations:
+          type: object
+          example:
+            "[language code]":
+              "[key]": "[value]"
+
+  responses:
+    UnexpectedError:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Response"
+
+paths:
+  /api/v1/csrf:
+    get:
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Response"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DramaType"
+        "500":
+          $ref: "#/components/responses/UnexpectedError"
+
+  /api/v1/drama/types:
+    post:
+      description: Create a drama type
+      parameters:
+        - in: header
+          name: X-XSRF-TOKEN
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DramaType"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Response"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DramaType"
+        "500":
+          $ref: "#/components/responses/UnexpectedError"
+
+  /api/v1/dramas:
+    post:
+      description: Create a drama
+      parameters:
+        - in: header
+          name: X-XSRF-TOKEN
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Drama"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Response"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          typeId:
+                            type: string
+                          translations:
+                            type: object
+        "500":
+          $ref: "#/components/responses/UnexpectedError"
