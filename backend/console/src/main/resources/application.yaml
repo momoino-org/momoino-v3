@@ -6,6 +6,10 @@ spring:
   application:
     name: console
 
+  threads:
+    virtual:
+      enabled: true
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}

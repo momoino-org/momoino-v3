@@ -18,6 +18,58 @@
             <column name="roles" type="varchar(255)" />
         </createTable>
 
+        <createTable tableName="drama_types" schemaName="public">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="translations" type="jsonb">
+                <constraints nullable="false" />
+            </column>
+            <column name="schema" type="jsonb">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="dramas" schemaName="public">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="type_id" type="varchar(255)">
+                <constraints nullable="false" foreignKeyName="fk-dramas-type__drama_types-id" referencedTableName="drama_types" referencedColumnNames="id" />
+            </column>
+        </createTable>
+
+        <createTable tableName="multilingual_dramas" schemaName="public">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="drama_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk-multilingual_dramas__dramas-id" referencedTableName="dramas" referencedColumnNames="id" />
+            </column>
+            <column name="lang_code" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="properties" type="jsonb" />
+        </createTable>
+
+        <insert tableName="drama_types" schemaName="public">
+            <column name="id" value="UNCLASSIFIED" />
+            <column name="translations" value="{}" />
+            <column name="schema" value='{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "default": "Empty description"
+    }
+  }
+}' />
+        </insert>
+
         <insert tableName="users" schemaName="public">
             <column name="id" value="0194310b-2bba-7c2e-8417-2f887af50fb2" />
             <column name="username" value="system" />
