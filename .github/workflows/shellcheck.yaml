@@ -17,9 +17,23 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      # redhat-plumbers-in-action/differential-shellcheck@v5.5.1
-      - uses: redhat-plumbers-in-action/differential-shellcheck@5fa026e4797665181a0f7c6fa4a73c09348ae78c
+
+      - id: ShellCheck
+        # redhat-plumbers-in-action/differential-shellcheck@v5.5.1
+        uses: redhat-plumbers-in-action/differential-shellcheck@5fa026e4797665181a0f7c6fa4a73c09348ae78c
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.ShellCheck.outputs.sarif }}
+          wait-for-processing: true

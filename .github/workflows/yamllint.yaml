@@ -7,13 +7,11 @@ name: YAML Linter
     paths:
       - "**.yaml"
       - "**.yml"
-      - .yamllint
   pull_request:
     branches: [main]
     paths:
       - "**.yaml"
       - "**.yml"
-      - .yamllint
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}
@@ -23,7 +21,13 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     steps:
       - uses: actions/checkout@v4
+
       - run: pip install yamllint
-      - run: yamllint .
+
+      - run: yamllint -c .yamllint.yaml --format github --strict .

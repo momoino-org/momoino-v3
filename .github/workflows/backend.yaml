@@ -1,5 +1,5 @@
 ---
-name: "[BE] Backend"
+name: Backend
 
 "on":
   pull_request:
@@ -17,9 +17,14 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -29,17 +34,21 @@ jobs:
           cache-dependency-path: |
             backend/*.gradle*
             backend/**/gradle-wrapper.properties
+
       - name: Setup Gradle
         # gradle/actions/setup-gradle@v4.3.0
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b
         with:
           gradle-version: wrapper
+
       - name: Linter
         working-directory: backend
         run: gradle check
+
       - name: Build
         working-directory: backend
         run: gradle :console:build
+
       - name: Upload build reports
         uses: actions/upload-artifact@v4
         if: always()
