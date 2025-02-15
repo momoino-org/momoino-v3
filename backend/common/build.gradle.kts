@@ -21,7 +21,7 @@ dependencies {
   api("org.springframework.boot:spring-boot-starter-validation")
   api("com.fasterxml.jackson.module:jackson-module-kotlin")
   api("org.jetbrains.kotlin:kotlin-reflect")
-  api("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
+  api("io.hypersistence:hypersistence-utils-hibernate-63:3.9.2")
   implementation("com.networknt:json-schema-validator:1.5.5")
   runtimeOnly("org.postgresql:postgresql")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
