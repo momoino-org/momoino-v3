@@ -4,10 +4,12 @@ name: CodeQL Advanced
 "on":
   push:
     branches: [main]
+    paths: [backend/**]
   pull_request:
     branches: [main]
+    paths: [backend/**]
   schedule:
-    - cron: 26 0 * * 1
+    - cron: 0 0 * * 1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}
