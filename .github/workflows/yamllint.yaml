@@ -15,6 +15,10 @@ name: YAML Linter
       - "**.yml"
       - .yamllint
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     name: Lint
