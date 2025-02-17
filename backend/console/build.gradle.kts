@@ -18,7 +18,7 @@ configurations {
 dependencies {
   implementation(project(":common"))
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-  implementation("org.liquibase:liquibase-core:4.30.0")
+  implementation("org.liquibase:liquibase-core:4.31.1")
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
