@@ -10,7 +10,7 @@ spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless
 
 [plugins]
 kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-gradle-plugin" }
-org-springframework-boot = { id = "org.springframework.boot", version = "3.4.2" }
+org-springframework-boot = { id = "org.springframework.boot", version = "3.4.3" }
 io-spring-dependencyManagement = { id = "io.spring.dependency-management", version = "1.1.7" }
 org-graalvm-buildtools-native = { id = "org.graalvm.buildtools.native", version = "0.10.5" }
 org-hibernate-orm = { id = "org.hibernate.orm", version = "6.6.8.Final" }
