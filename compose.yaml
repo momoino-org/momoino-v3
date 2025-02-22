@@ -30,7 +30,7 @@ services:
           - ${KEYCLOAK_NETWORK_ALIAS}
 
   database:
-    image: postgres:17.3
+    image: postgres:17.4
     environment:
       POSTGRES_USER: ${SUPER_DB_USER}
       POSTGRES_PASSWORD: ${SUPER_DB_PASSWORD}
