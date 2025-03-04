@@ -37,7 +37,7 @@ jobs:
 
       - name: Setup Gradle
         # gradle/actions/setup-gradle@v4.3.0
-        uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b
+        uses: gradle/actions/setup-gradle@4504a95ca57b383b150e5f64cece035031420365
         with:
           gradle-version: wrapper
 
